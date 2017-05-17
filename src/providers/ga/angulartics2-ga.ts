@@ -169,11 +169,21 @@ export class Angulartics2GoogleAnalytics {
     if (ga) {
       // add custom dimensions and metrics
       for (var idx = 1; idx <= 200; idx++) {
-        if (properties['dimension' + idx.toString()]) {
-          ga('set', 'dimension' + idx.toString(), properties['dimension' + idx.toString()]);
+        const metric = `metric${idx}`;
+        const dimension = `dimension${idx}`;
+
+        if (properties[dimension]) {
+          ga('set', dimension, properties[dimension]);
+          this.angulartics2.settings.ga.additionalAccountNames.forEach((accountName: string) => {
+            ga(`${accountName}.set`, dimension, properties[dimension]);
+          });
         }
-        if (properties['metric' + idx.toString()]) {
-          ga('set', 'metric' + idx.toString(), properties['metric' + idx.toString()]);
+
+        if (properties[metric]) {
+          ga('set', metric, properties[metric]);
+          this.angulartics2.settings.ga.additionalAccountNames.forEach((accountName: string) => {
+            ga(`${accountName}.set`, metric, properties[metric]);
+          });
         }
       }
     }
